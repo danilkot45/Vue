@@ -18,10 +18,14 @@
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Add new Task" v-model="newTitle">
                     <div class="input-group-append">
-                        <button :disabled="newTitle.length === 0" class="btn btn-outline-secondary" type="button" @click="addTask()">Add</button>
+                        <button :disabled="newTitle.length === 0 || !newTitle.trim()" class="btn btn-outline-secondary" type="button" @click="addTask()">Add</button>
                     </div>
                 </div>
             </form>
+            <button class="btn btn-primary"> Сompleted tasks {{completedTasks}}</button>
+            <button class="btn btn-primary"> all tasks {{nextId - 1}}</button>
+            <button class="btn btn-primary"> Precent complete tasklist {{completeTasklist}}</button>
+            <br><br>
             <ul class="list-group">
                 <li v-for="(i,index) in todoItems" class="list-group-item"> 
                     <button :class="btnColor(index)">{{btnText(index)}}</button> {{i.text}}</li>
@@ -42,7 +46,22 @@
                     { id: 5, text: 'task 5', done: false }
                 ],
                 nextId: 6,
-                newTitle:''
+                newTitle:'',
+                count: 0
+            },
+            computed:{
+                completedTasks(){
+                    this.count = 0
+                    for(i in this.todoItems){
+                        if(this.todoItems[i].done === true){
+                            this.count ++
+                        }
+                    }
+                    return this.count
+                },
+                completeTasklist(){
+                    return (this.count/(this.nextId-1)*100).toFixed(2) +'%' 
+                }
             },
             methods: {
                 btnText(id) {
@@ -52,7 +71,6 @@
                     return this.todoItems[id].done === true ? 'btn btn-success' : 'btn btn-secondary'
                 },
                 addTask() {
-                        console.log(this.todoItems)
                         this.todoItems.push({
                             id: this.nextId++,
                             text: this.newTitle,
