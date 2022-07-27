@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,39 +9,60 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Vue</title>
 </head>
+
 <body>
     <div class="wrapper">
         <div class="lessonOne">
             <h1>{{message}}</h1>
+            <form>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Add new Task" v-model="newTitle">
+                    <div class="input-group-append">
+                        <button :disabled="newTitle.length === 0" class="btn btn-outline-secondary" type="button" @click="addTask()">Add</button>
+                    </div>
+                </div>
+            </form>
             <ul class="list-group">
-                <li v-for="(i,index) in todoItems" class="list-group-item"> <button :class="btnColor(index)">{{btnText(index)}}</button>  {{i.text}}</li>
+                <li v-for="(i,index) in todoItems" class="list-group-item"> 
+                    <button :class="btnColor(index)">{{btnText(index)}}</button> {{i.text}}</li>
             </ul>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script>
         new Vue({
-            el:'.lessonOne',
-            data:{
-                message:'Hello from Vue App',
-                todoItems:[
-                    {id:1, text:'task 1', done: false},
-                    {id:2, text:'task 2', done: false},
-                    {id:3, text:'task 3', done: true},
-                    {id:4, text:'task 4', done: false},
-                    {id:5, text:'task 5', done: false}
-                ]
+            el: '.lessonOne',
+            data: {
+                message: 'Hello from Vue App',
+                todoItems: [
+                    { id: 1, text: 'task 1', done: false },
+                    { id: 2, text: 'task 2', done: false },
+                    { id: 3, text: 'task 3', done: true },
+                    { id: 4, text: 'task 4', done: false },
+                    { id: 5, text: 'task 5', done: false }
+                ],
+                nextId: 6,
+                newTitle:''
             },
-            methods:{
-                btnText(id){
+            methods: {
+                btnText(id) {
                     return this.todoItems[id].done === true ? 'completed' : 'in order'
                 },
-                btnColor(id){
-                    console.log(this.todoItems[id].done)
+                btnColor(id) {
                     return this.todoItems[id].done === true ? 'btn btn-success' : 'btn btn-secondary'
+                },
+                addTask() {
+                        console.log(this.todoItems)
+                        this.todoItems.push({
+                            id: this.nextId++,
+                            text: this.newTitle,
+                            done: false
+                        })
+                        this.newTitle = ''
                 }
             }
         })
     </script>
 </body>
+
 </html>
