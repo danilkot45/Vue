@@ -15,23 +15,27 @@
         <div class="lessonOne">
             <h1>{{message}}</h1>
             <form>
-                <app-form  :add="addTask" :value="newTitle" @input="newTitle = $event"> </app-form>
+                <app-form :add="addTask" :value="newTitle" @input="newTitle = $event"> </app-form>
             </form>
             <app-btn-statistic :compl="completedTasks" :id="nextId" :comptask="completeTasklist"></app-btn-statistic>
             <br><br>
+
+            <input v-model="searchTitle">
+            <br><br>
             <ul class="list-group">
-                <app-list v-for="(i, index) in todoItems" :key="i.id" :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)" ></app-list>
+                <app-list v-for="(i, index) in todoList" :key="i.id" :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
             </ul>
+
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script>
-        Vue.component("app-form",{
-            props:{
+        Vue.component("app-form", {
+            props: {
                 value: String,
-                add:Function
+                add: Function
             },
-            methods:{},
+            methods: {},
             template: `<div class="input-group mb-3"> 
                          <input type="text" class="form-control" placeholder="Add new Task" :value="value" @input="$emit('input', $event.target.value)" >
                             <div class="input-group-append">
@@ -40,25 +44,25 @@
                       </div>`
 
         })
-        Vue.component("app-btn-statistic",{
-            props:{
+        Vue.component("app-btn-statistic", {
+            props: {
                 compl: Number,
-                id:Number,
-                comptask:String 
+                id: Number,
+                comptask: String
             },
-            methods:{},
+            methods: {},
             template: '<div> <button class="btn btn-primary"> Сompleted tasks {{compl}}</button> <button class="btn btn-primary"> all tasks {{id - 1}}</button> <button class="btn btn-primary"> Precent complete tasklist {{comptask}}</button> </div>'
 
         })
-        Vue.component("app-list",{
+        Vue.component("app-list", {
             // props:['text','id','color','btntext'],
-            props:{
-            text:String,
-            id:Number,
-            color:String,
-            btntext:String
+            props: {
+                text: String,
+                id: Number,
+                color: String,
+                btntext: String
             },
-            methods:{},
+            methods: {},
             template: `<li  class="list-group-item">  
                         <button :class="color">{{btntext}}</button> {{text}}
                        </li> `
@@ -75,40 +79,47 @@
                     { id: 5, text: 'task 5', done: false }
                 ],
                 nextId: 6,
-                newTitle:'',
+                newTitle: '',
+                searchTitle: '',
                 count: 0
             },
-            computed:{
-                completedTasks(){
+            computed: {
+                completedTasks() {
                     this.count = 0
-                    for(i in this.todoItems){
-                        if(this.todoItems[i].done === true){
-                            this.count ++
+                    for (i in this.todoItems) {
+                        if (this.todoItems[i].done === true) {
+                            this.count++
                         }
                     }
                     return this.count
                 },
-                completeTasklist(){
-                    return (this.count/(this.nextId-1)*100).toFixed(2) +'%' 
+                completeTasklist() {
+                    return (this.count / (this.nextId - 1) * 100).toFixed(2) + '%'
+                },
+                todoList() {
+                    var vm = this
+                    return this.todoItems.filter(function (i) {
+                        return i.text.toLowerCase().indexOf(vm.searchTitle.toLowerCase()) !== -1
+                    })
                 }
             },
             methods: {
                 btnText(id) {
-                    return this.todoItems[id].done === true ? 'completed' : 'in order'
+                    return this.todoList[id].done === true ? 'completed' : 'in order'
                 },
                 btnColor(id) {
-                    return this.todoItems[id].done === true ? 'btn btn-success' : 'btn btn-secondary'
+                    return this.todoList[id].done === true ? 'btn btn-success' : 'btn btn-secondary'
                 },
                 addTask() {
-                        this.todoItems.push({
-                            id: this.nextId++,
-                            text: this.newTitle,
-                            done: false
-                        })
-                        // console.log(this.newTitle)
-                        // console.log(this.todoItems)
-                        this.newTitle = ''
-                        
+                    this.todoItems.push({
+                        id: this.nextId++,
+                        text: this.newTitle,
+                        done: false
+                    })
+                    // console.log(this.newTitle)
+                    // console.log(this.todoItems)
+                    // console.log(this.todoList)
+                    this.newTitle = ''
                 }
             }
         })
