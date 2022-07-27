@@ -12,6 +12,9 @@
     <div class="wrapper">
         <div class="lessonOne">
             <h1>{{message}}</h1>
+            <ul class="list-group">
+                <li v-for="(i,index) in todoItems" class="list-group-item"> <button :class="btnColor(index)">{{btnText(index)}}</button>  {{i.text}}</li>
+            </ul>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
@@ -19,7 +22,23 @@
         new Vue({
             el:'.lessonOne',
             data:{
-                message:'Hello from Vue App'
+                message:'Hello from Vue App',
+                todoItems:[
+                    {id:1, text:'task 1', done: false},
+                    {id:2, text:'task 2', done: false},
+                    {id:3, text:'task 3', done: true},
+                    {id:4, text:'task 4', done: false},
+                    {id:5, text:'task 5', done: false}
+                ]
+            },
+            methods:{
+                btnText(id){
+                    return this.todoItems[id].done === true ? 'completed' : 'in order'
+                },
+                btnColor(id){
+                    console.log(this.todoItems[id].done)
+                    return this.todoItems[id].done === true ? 'btn btn-success' : 'btn btn-secondary'
+                }
             }
         })
     </script>
