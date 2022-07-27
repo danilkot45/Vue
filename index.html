@@ -15,25 +15,54 @@
         <div class="lessonOne">
             <h1>{{message}}</h1>
             <form>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Add new Task" v-model="newTitle">
-                    <div class="input-group-append">
-                        <button :disabled="newTitle.length === 0 || !newTitle.trim()" class="btn btn-outline-secondary" type="button" @click="addTask()">Add</button>
-                    </div>
-                </div>
+                <app-form  :add="addTask" :value="newTitle" @input="newTitle = $event"> </app-form>
             </form>
-            <button class="btn btn-primary"> Сompleted tasks {{completedTasks}}</button>
-            <button class="btn btn-primary"> all tasks {{nextId - 1}}</button>
-            <button class="btn btn-primary"> Precent complete tasklist {{completeTasklist}}</button>
+            <app-btn-statistic :compl="completedTasks" :id="nextId" :comptask="completeTasklist"></app-btn-statistic>
             <br><br>
             <ul class="list-group">
-                <li v-for="(i,index) in todoItems" class="list-group-item"> 
-                    <button :class="btnColor(index)">{{btnText(index)}}</button> {{i.text}}</li>
+                <app-list v-for="(i, index) in todoItems" :key="i.id" :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)" ></app-list>
             </ul>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script>
+        Vue.component("app-form",{
+            props:{
+                value: String,
+                add:Function
+            },
+            methods:{},
+            template: `<div class="input-group mb-3"> 
+                         <input type="text" class="form-control" placeholder="Add new Task" :value="value" @input="$emit('input', $event.target.value)" >
+                            <div class="input-group-append">
+                              <button :disabled="value.length === 0 || !value.trim()" class="btn btn-outline-secondary"  @click="add()">Add</button> 
+                            </div> 
+                      </div>`
+
+        })
+        Vue.component("app-btn-statistic",{
+            props:{
+                compl: Number,
+                id:Number,
+                comptask:String 
+            },
+            methods:{},
+            template: '<div> <button class="btn btn-primary"> Сompleted tasks {{compl}}</button> <button class="btn btn-primary"> all tasks {{id - 1}}</button> <button class="btn btn-primary"> Precent complete tasklist {{comptask}}</button> </div>'
+
+        })
+        Vue.component("app-list",{
+            // props:['text','id','color','btntext'],
+            props:{
+            text:String,
+            id:Number,
+            color:String,
+            btntext:String
+            },
+            methods:{},
+            template: `<li  class="list-group-item">  
+                        <button :class="color">{{btntext}}</button> {{text}}
+                       </li> `
+        })
         new Vue({
             el: '.lessonOne',
             data: {
@@ -76,7 +105,10 @@
                             text: this.newTitle,
                             done: false
                         })
+                        // console.log(this.newTitle)
+                        // console.log(this.todoItems)
                         this.newTitle = ''
+                        
                 }
             }
         })
