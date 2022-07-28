@@ -18,14 +18,27 @@
                 <app-form :add="addTask" :value="newTitle" @input="newTitle = $event"> </app-form>
             </form>
             <app-btn-statistic :compl="completedTasks" :id="nextId" :comptask="completeTasklist"></app-btn-statistic>
-            <br><br>
-
+            <br>
+            <input type="radio" class="btn-check" name="options" id="option2" @change="switches('all')" checked>
+            <label class="btn btn-outline-warning" for="option2">Все задачи</label>
+            
+            <input type="radio" class="btn-check" name="options" id="option3" @change="switches('completed')" >
+            <label class="btn btn-outline-success" for="option3">Выполненные задачи</label>
+            
+            <input type="radio" class="btn-check" name="options" id="option4" @change="switches()" >
+            <label class="btn btn-outline-secondary" for="option4">Невыполненные задачи</label>
+<br><br>
             <input v-model="searchTitle">
             <br><br>
-            <ul class="list-group">
-                <app-list v-for="(i, index) in todoList" :key="i.id" :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
+            <ul class="list-group" id="list1" style="display:block">
+                <app-list   v-for="(i, index) in todoList"    :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
             </ul>
-
+            <ul class="list-group" id="list2" style="display:none">
+                <app-list   v-show="i.done===true"  v-for="(i, index) in todoList"    :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
+            </ul>
+            <ul class="list-group" id="list3" style="display:none">
+                <app-list    v-show="i.done===false"  v-for="(i, index) in todoList"   :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
+            </ul>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
@@ -60,7 +73,8 @@
                 text: String,
                 id: Number,
                 color: String,
-                btntext: String
+                btntext: String,
+                done: Boolean
             },
             methods: {},
             template: `<li  class="list-group-item">  
@@ -81,7 +95,8 @@
                 nextId: 6,
                 newTitle: '',
                 searchTitle: '',
-                count: 0
+                count: 0,
+                state:''
             },
             computed: {
                 completedTasks() {
@@ -120,8 +135,29 @@
                     // console.log(this.todoItems)
                     // console.log(this.todoList)
                     this.newTitle = ''
+                },
+                switches(state){
+                    let all = document.querySelector('#list1');
+                    let completed = document.querySelector('#list2');
+                    let order = document.querySelector('#list3');
+
+                    if(state ==='all'){
+                    all.setAttribute('style','display:block')
+                    completed.setAttribute('style','display:none')
+                    order.setAttribute('style','display:none')
+                    }
+                    else if(state === 'completed'){
+                        all.setAttribute('style','display:none')
+                        completed.setAttribute('style','display:block')
+                        order.setAttribute('style','display:none')
+                    }
+                    else{
+                        all.setAttribute('style','display:none')
+                        completed.setAttribute('style','display:none')
+                        order.setAttribute('style','display:block')
+                    }
                 }
-            }
+        }
         })
     </script>
 </body>
