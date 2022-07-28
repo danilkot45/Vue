@@ -32,11 +32,13 @@
             <br><br>
             <ul class="list-group" id="list1" style="display:block">
                 <app-list   v-for="(i, index) in todoList"    :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
+            <h2 ref="addText">{{titleAdd }}</h2>
+            <ul class="list-group" ref="list1" style="display:block">
+                <app-list   v-for="(i, index) in todoList"    :id="index" :text="i.text" @click="i.done=!i.done" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
             </ul>
             <ul class="list-group" id="list2" style="display:none">
                 <app-list   v-show="i.done===true"  v-for="(i, index) in todoList"    :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
             </ul>
-            <ul class="list-group" id="list3" style="display:none">
                 <app-list    v-show="i.done===false"  v-for="(i, index) in todoList"   :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
             </ul>
         </div>
@@ -52,7 +54,7 @@
             template: `<div class="input-group mb-3"> 
                          <input type="text" class="form-control" placeholder="Add new Task" :value="value" @input="$emit('input', $event.target.value)" >
                             <div class="input-group-append">
-                              <button :disabled="value.length === 0 || !value.trim()" class="btn btn-outline-secondary"  @click="add()">Add</button> 
+                              <button :disabled="value.length === 0 || !value.trim()"  class="btn btn-outline-secondary"  @click="add()">Add</button> 
                             </div> 
                       </div>`
 
@@ -64,11 +66,10 @@
                 comptask: String
             },
             methods: {},
-            template: '<div> <button class="btn btn-primary"> Сompleted tasks {{compl}}</button> <button class="btn btn-primary"> all tasks {{id - 1}}</button> <button class="btn btn-primary"> Precent complete tasklist {{comptask}}</button> </div>'
+            template: '<div> <button class="btn btn-primary"> Сompleted tasks {{compl}}</button> <button class="btn btn-primary"> All tasks {{id - 1}}</button> <button class="btn btn-primary"> Precent complete tasklist {{comptask}}</button> </div>'
 
         })
         Vue.component("app-list", {
-            // props:['text','id','color','btntext'],
             props: {
                 text: String,
                 id: Number,
@@ -78,25 +79,20 @@
             },
             methods: {},
             template: `<li  class="list-group-item">  
-                        <button :class="color">{{btntext}}</button> {{text}}
+                        <button :class="color" @click="$emit('click', done)">{{btntext}}</button> {{text}}
                        </li> `
         })
         new Vue({
             el: '.lessonOne',
             data: {
                 message: 'Hello from Vue App',
-                todoItems: [
-                    { id: 1, text: 'task 1', done: false },
-                    { id: 2, text: 'task 2', done: false },
-                    { id: 3, text: 'task 3', done: true },
-                    { id: 4, text: 'task 4', done: false },
-                    { id: 5, text: 'task 5', done: false }
-                ],
-                nextId: 6,
+                todoItems: [],
+                nextId: 1,
                 newTitle: '',
                 searchTitle: '',
                 count: 0,
-                state:''
+                titleAdd:'Please add new task',
+
             },
             computed: {
                 completedTasks() {
@@ -109,7 +105,7 @@
                     return this.count
                 },
                 completeTasklist() {
-                    return (this.count / (this.nextId - 1) * 100).toFixed(2) + '%'
+                    return this.nextId-1===0 ? '0 %':(this.count / (this.nextId - 1) * 100).toFixed(2) + '%'
                 },
                 todoList() {
                     var vm = this
@@ -131,17 +127,19 @@
                         text: this.newTitle,
                         done: false
                     })
+                    this.$refs.addText.setAttribute('style','display:none')
                     // console.log(this.newTitle)
-                    // console.log(this.todoItems)
+                    console.log(this.todoItems)
                     // console.log(this.todoList)
                     this.newTitle = ''
                 },
                 switches(state){
-                    let all = document.querySelector('#list1');
-                    let completed = document.querySelector('#list2');
-                    let order = document.querySelector('#list3');
-
+                    let all = this.$refs.list1;
+                    let completed =this.$refs.list2;
+                    let order = this.$refs.list3;
+                    
                     if(state ==='all'){
+
                     all.setAttribute('style','display:block')
                     completed.setAttribute('style','display:none')
                     order.setAttribute('style','display:none')
@@ -157,7 +155,7 @@
                         order.setAttribute('style','display:block')
                     }
                 }
-        }
+            }
         })
     </script>
 </body>
