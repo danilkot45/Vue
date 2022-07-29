@@ -17,29 +17,21 @@
             <form>
                 <app-form :add="addTask" :value="newTitle" @input="newTitle = $event"> </app-form>
             </form>
-            <app-btn-statistic :compl="completedTasks" :id="nextId" :comptask="completeTasklist"></app-btn-statistic>
+            <app-btn-statistic :compl="completedTasks" :id="allTasks" :comptask="completeTasklist"></app-btn-statistic>
             <br>
-            <input type="radio" class="btn-check" name="options" id="option2" @change="switches('all')" checked>
-            <label class="btn btn-outline-warning" for="option2">Все задачи</label>
-            
-            <input type="radio" class="btn-check" name="options" id="option3" @change="switches('completed')" >
-            <label class="btn btn-outline-success" for="option3">Выполненные задачи</label>
-            
-            <input type="radio" class="btn-check" name="options" id="option4" @change="switches()" >
-            <label class="btn btn-outline-secondary" for="option4">Невыполненные задачи</label>
-<br><br>
+            <template v-for="i in radioTask">
+                <input type="radio" class="btn-check" name="options" :id="i.id" @change="radioState = i.change"
+                    :checked="i.check">
+                <label :for="i.id" :class="i.classes" style="margin-right: 5px;"> {{i.title}}</label>
+            </template>
+            <br><br>
             <input v-model="searchTitle">
             <br><br>
-            <ul class="list-group" id="list1" style="display:block">
-                <app-list   v-for="(i, index) in todoList"    :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
             <h2 ref="addText">{{titleAdd }}</h2>
-            <ul class="list-group" ref="list1" style="display:block">
-                <app-list   v-for="(i, index) in todoList"    :id="index" :text="i.text" @click="i.done=!i.done" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
-            </ul>
-            <ul class="list-group" id="list2" style="display:none">
-                <app-list   v-show="i.done===true"  v-for="(i, index) in todoList"    :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
-            </ul>
-                <app-list    v-show="i.done===false"  v-for="(i, index) in todoList"   :id="index" :text="i.text" :btntext="btnText(index)" :color="btnColor(index)"></app-list>
+            <ul class="list-group">
+                <app-list v-for="(i, index) in todoList" :id="index" :text="i.text" @click="i.done=!i.done"
+                    :btntext="i.done === true ? 'completed' : 'in order'"
+                    :color="i.done === true ? 'btn btn-success' : 'btn btn-secondary'"></app-list>
             </ul>
         </div>
     </div>
@@ -66,10 +58,11 @@
                 comptask: String
             },
             methods: {},
-            template: '<div> <button class="btn btn-primary"> Сompleted tasks {{compl}}</button> <button class="btn btn-primary"> All tasks {{id - 1}}</button> <button class="btn btn-primary"> Precent complete tasklist {{comptask}}</button> </div>'
+            template: '<div> <button class="btn btn-primary"> Сompleted tasks {{compl}}</button> <button class="btn btn-primary"> All tasks {{id}}</button> <button class="btn btn-primary"> Precent complete tasklist {{comptask}}</button> </div>'
 
         })
         Vue.component("app-list", {
+            // props:['text','id','color','btntext','done'],
             props: {
                 text: String,
                 id: Number,
@@ -87,14 +80,21 @@
             data: {
                 message: 'Hello from Vue App',
                 todoItems: [],
-                nextId: 1,
+                radioTask: [
+                    { id: "option1", change: "", classes: "btn btn-outline-warning", check: true, title: "Все задачи" },
+                    { id: "option2", change: "completed", classes: "btn btn-outline-success", check: false, title: "Выполненные задачи" },
+                    { id: "option3", change: "uncompleted", classes: "btn btn-outline-secondary", check: false, title: "Невыполненные задачи" }],
                 newTitle: '',
                 searchTitle: '',
                 count: 0,
-                titleAdd:'Please add new task',
+                radioState: "",
+                titleAdd: 'Please add new task',
 
             },
             computed: {
+                allTasks() {
+                    return this.todoItems.length;
+                },
                 completedTasks() {
                     this.count = 0
                     for (i in this.todoItems) {
@@ -105,55 +105,34 @@
                     return this.count
                 },
                 completeTasklist() {
-                    return this.nextId-1===0 ? '0 %':(this.count / (this.nextId - 1) * 100).toFixed(2) + '%'
+                    return this.allTasks === 0 ? '0 %' : (this.count / (this.allTasks) * 100).toFixed(2) + '%'
                 },
                 todoList() {
                     var vm = this
-                    return this.todoItems.filter(function (i) {
+                    let sortList = this.todoItems.filter(function (i) {
                         return i.text.toLowerCase().indexOf(vm.searchTitle.toLowerCase()) !== -1
                     })
+                    if (this.radioState === "completed") {
+                        return sortList.filter(function (i) { return i.done })
+                    } else if (this.radioState === "uncompleted") {
+                        return sortList.filter(function (i) { return !i.done })
+                    } else {
+                        return sortList
+                    }
                 }
             },
             methods: {
-                btnText(id) {
-                    return this.todoList[id].done === true ? 'completed' : 'in order'
-                },
-                btnColor(id) {
-                    return this.todoList[id].done === true ? 'btn btn-success' : 'btn btn-secondary'
-                },
                 addTask() {
                     this.todoItems.push({
-                        id: this.nextId++,
+                        id: this.allTasks + 1,
                         text: this.newTitle,
                         done: false
                     })
-                    this.$refs.addText.setAttribute('style','display:none')
+                    this.$refs.addText.setAttribute('style', 'display:none')
                     // console.log(this.newTitle)
-                    console.log(this.todoItems)
+                    // console.log(this.todoItems)
                     // console.log(this.todoList)
                     this.newTitle = ''
-                },
-                switches(state){
-                    let all = this.$refs.list1;
-                    let completed =this.$refs.list2;
-                    let order = this.$refs.list3;
-                    
-                    if(state ==='all'){
-
-                    all.setAttribute('style','display:block')
-                    completed.setAttribute('style','display:none')
-                    order.setAttribute('style','display:none')
-                    }
-                    else if(state === 'completed'){
-                        all.setAttribute('style','display:none')
-                        completed.setAttribute('style','display:block')
-                        order.setAttribute('style','display:none')
-                    }
-                    else{
-                        all.setAttribute('style','display:none')
-                        completed.setAttribute('style','display:none')
-                        order.setAttribute('style','display:block')
-                    }
                 }
             }
         })
