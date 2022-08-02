@@ -1,6 +1,7 @@
 <template>
     <li class="list-group-item">
-        <button :class="color" @click="$emit('click', done)">{{ btntext }}</button> {{ text }}
+        ☞ <button :class="color" @click="$emit('click', done)">{{ btntext }}</button> {{ text }}
+        <slot></slot>
     </li>
 </template>
 
@@ -18,3 +19,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.btn-danger {
+    float: right;
+}
+</style>

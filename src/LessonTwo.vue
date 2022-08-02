@@ -1,7 +1,7 @@
 
 <template>
   <div id="lessonTwo">
-    <h1>{{ message }}</h1>
+    <h1>{{ message }} 🎉</h1>
     <form>
       <Form :add="addTask" :value="newTitle" @input="newTitle = $event"> </Form>
     </form>
@@ -13,13 +13,14 @@
       <label :for="i.id" :class="i.classes" style="margin-right: 5px;"> {{ i.title }}</label>
     </template>
     <br><br>
-    <input v-model="searchTitle">
+    <input v-model="searchTitle" placeholder="🔎">
     <br>
     <br>
     <h2 v-show="this.todoItems.length == 0">{{ titleAdd }}</h2>
     <ul class="list-group">
-      <TodoList v-for="(i, index) in todoList" :id="index" :key="i.id" :text="i.text" @click="i.done = !i.done"
-        :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'">
+      <TodoList v-for="(i, index) in todoList" :id="index"  :text="i.text" @click="i.done= !i.done"
+     :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'">
+       <button class="btn btn-danger" @click="removeTask(index)">Удалить</button>
       </TodoList>
     </ul>
   </div>
@@ -35,9 +36,9 @@ export default {
       message: 'Hello from Vue App',
       todoItems: [],
       radioTask: [
-        { id: "option1", change: "", classes: "btn btn-outline-warning", check: true, title: "Все задачи" },
-        { id: "option2", change: "completed", classes: "btn btn-outline-success", check: false, title: "Выполненные задачи" },
-        { id: "option3", change: "uncompleted", classes: "btn btn-outline-secondary", check: false, title: "Невыполненные задачи" }],
+        { id: "option1", change: "", classes: "btn btn-outline-warning", check: true, title: "Все задачи 🤯" },
+        { id: "option2", change: "completed", classes: "btn btn-outline-success", check: false, title: "Выполненные задачи 😍" },
+        { id: "option3", change: "uncompleted", classes: "btn btn-outline-secondary", check: false, title: "Невыполненные задачи ☠️" }],
       newTitle: '',
       searchTitle: '',
       count: 0,
@@ -94,6 +95,11 @@ export default {
       this.newTitle = ''
       localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
     },
+    removeTask(index){
+      console.log(index)
+      this.todoItems.splice(index,1)
+      localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
+    }
   },
   components: {
     Form,
