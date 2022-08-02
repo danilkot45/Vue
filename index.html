@@ -29,9 +29,9 @@
             <br><br>
             <h2 ref="addText">{{titleAdd }}</h2>
             <ul class="list-group">
-                <app-list v-for="(i, index) in todoList" :id="index" :text="i.text" @click="i.done=!i.done"
-                    :btntext="i.done === true ? 'completed' : 'in order'"
-                    :color="i.done === true ? 'btn btn-success' : 'btn btn-secondary'"></app-list>
+                <app-list v-for="(i, index) in todoList" :id="index" :key="i.id" :text="i.text" @click="i.done=!i.done"
+                    :btntext="i.done  ? 'completed' : 'in order'"
+                    :color="i.done  ? 'btn btn-success' : 'btn btn-secondary'"></app-list>
             </ul>
         </div>
     </div>
