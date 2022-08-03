@@ -1,6 +1,8 @@
 <template>
     <li class="list-group-item">
-        ☞ <button :class="color" @click="$emit('click', done)">{{ btntext }}</button> {{ text }}
+        ☞ <button :class="color" @click="$emit('click', done)">{{ btntext }}</button>
+          <textarea spellcheck="false" rows="1" cols="30"  class="edit" type="text" :value="value"
+            @input="$emit('textarea', $event.target.value)" >{{value}}</textarea>
         <slot></slot>
     </li>
 </template>
@@ -11,7 +13,7 @@ export default {
 
     // props:['text','id','color','btntext','done'],
     props: {
-        text: String,
+        value: String,
         id: Number,
         color: String,
         btntext: String,
@@ -23,5 +25,14 @@ export default {
 <style>
 .btn-danger {
     float: right;
+}
+
+.edit {
+    position: absolute;
+    top:15px;
+    outline: none;
+    cursor: pointer;
+    border: none;
+resize: none;
 }
 </style>

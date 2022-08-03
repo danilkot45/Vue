@@ -13,14 +13,15 @@
       <label :for="i.id" :class="i.classes" style="margin-right: 5px;"> {{ i.title }}</label>
     </template>
     <br><br>
-    <input v-model="searchTitle" placeholder="🔎">
+    <input v-model="searchTitle" placeholder="🔎"> <span style="margin-left:10px">📍Если хотите отредактировать задачу,
+      то нажмите на текст и редактируйте!</span>
     <br>
     <br>
     <h2 v-show="this.todoItems.length == 0">{{ titleAdd }}</h2>
     <ul class="list-group">
-      <TodoList v-for="(i, index) in todoList" :id="index"  :text="i.text" @click="i.done= !i.done"
-     :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'">
-       <button class="btn btn-danger" @click="removeTask(index)">Удалить</button>
+      <TodoList v-for="(i, index) in todoList" :id="index" @click="i.done = !i.done" :value="i.text"
+        @textarea="i.text = $event" :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'">
+        <button class="btn btn-danger" @click="removeTask(index)">Удалить</button>
       </TodoList>
     </ul>
   </div>
@@ -95,9 +96,9 @@ export default {
       this.newTitle = ''
       localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
     },
-    removeTask(index){
+    removeTask(index) {
       console.log(index)
-      this.todoItems.splice(index,1)
+      this.todoItems.splice(index, 1)
       localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
     }
   },
