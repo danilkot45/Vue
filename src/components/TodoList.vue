@@ -3,6 +3,7 @@
         ☞ <button :class="color" @click="$emit('click', done)">{{ btntext }}</button>
           <textarea spellcheck="false" rows="1" cols="30"  class="edit" type="text" :value="value"
             @input="$emit('textarea', $event.target.value)" >{{value}}</textarea>
+            <button class="btn btn-danger" @click="$emit('delete',removeTask)">Удалить</button>
         <slot></slot>
     </li>
 </template>
@@ -17,7 +18,8 @@ export default {
         id: Number,
         color: String,
         btntext: String,
-        done: Boolean
+        done: Boolean,
+        removeTask: Function
     }
 }
 </script>

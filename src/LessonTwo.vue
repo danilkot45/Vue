@@ -1,9 +1,9 @@
 
 <template>
   <div id="lessonTwo">
-    <h1>{{ message }} 🎉</h1>
+    <h1 v-color:color.font.height ="'70px'" style="text-align: center;">{{ message }} 🎉</h1>
     <form>
-      <Form :add="addTask" :value="newTitle" @input="newTitle = $event"> </Form>
+      <Form  :add="addTask" :value="newTitle" @input="newTitle = $event"> </Form>
     </form>
     <Statistics :compl="completedTasks" :id="allTasks" :comptask="completeTasklist"></Statistics>
     <br>
@@ -20,9 +20,11 @@
     <h2 v-show="this.todoItems.length == 0">{{ titleAdd }}</h2>
     <ul class="list-group">
       <TodoList v-for="(i, index) in todoList" :id="index" @click="i.done = !i.done" :value="i.text"
-        @textarea="i.text = $event" :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'">
-        <button class="btn btn-danger" @click="removeTask(index)">Удалить</button>
+        @textarea="i.text = $event" :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'"
+        @delete="removeTask(index)">
+        
       </TodoList>
+      <span v-scroll-end class="knopka"><a>Наверх</a></span>
     </ul>
   </div>
 </template>
@@ -82,11 +84,11 @@ export default {
   methods: {
     btnText(id) {
       localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
-      return this.todoList[id].done === true ? 'completed' : 'in order'
+      return this.todoList[id].done ? 'completed' : 'in order'
     },
     addTask() {
       this.todoItems.push({
-        id: this.allTasks + 1,
+        id: new Date(),
         text: this.newTitle,
         done: false
       })
@@ -97,7 +99,6 @@ export default {
       localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
     },
     removeTask(index) {
-      console.log(index)
       this.todoItems.splice(index, 1)
       localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
     }
@@ -118,4 +119,16 @@ export default {
 </script>
 
 <style>
+.knopka {
+	opacity: 0;
+  background-color: yellowgreen;
+  color: #fff;
+	padding: 15px 15px;
+	border-radius: 5px;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+  cursor: pointer;
+	transition: all .3s ease-in-out;
+}
 </style>
