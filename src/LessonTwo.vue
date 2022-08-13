@@ -13,8 +13,11 @@
       <label :for="i.id" :class="i.classes" style="margin-right: 5px;"> {{ i.title }}</label>
     </template>
     <br><br>
-    <input v-model="searchTitle" placeholder="🔎"> <span style="margin-left:10px">📍Если хотите отредактировать задачу,
+    <input v-model="searchTitle" placeholder="🔎"> <span style="margin:0 10px">📍Если хотите отредактировать задачу,
       то нажмите на текст и редактируйте!</span>
+    <br>
+    <br>
+    <RenderButton></RenderButton>
     <br>
     <br>
     <h2 v-show="this.todoItems.length == 0">{{ titleAdd }}</h2>
@@ -32,6 +35,7 @@
 import Form from './components/Form.vue'
 import TodoList from './components/TodoList.vue'
 import Statistics from './components/Statistics.vue'
+import RenderButton from './components/RenderButton.vue'
 export default {
   name: 'LessonTwo',
   data() {
@@ -106,7 +110,8 @@ export default {
   components: {
     Form,
     TodoList,
-    Statistics
+    Statistics,
+    RenderButton
   },
   mounted() {
     let data = JSON.parse(localStorage.getItem('todoItems'));
@@ -129,6 +134,6 @@ export default {
 	right: 20px;
 	bottom: 20px;
   cursor: pointer;
-	transition: all .3s ease-in-out;
+	transition: all .5s ease-in-out;
 }
 </style>
