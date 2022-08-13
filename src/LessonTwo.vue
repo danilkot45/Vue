@@ -18,6 +18,8 @@
     <br>
     <br>
     <RenderButton></RenderButton>
+    <br><br>
+    <MoneyFilters></MoneyFilters>
     <br>
     <br>
     <h2 v-show="this.todoItems.length == 0">{{ titleAdd }}</h2>
@@ -36,6 +38,7 @@ import Form from './components/Form.vue'
 import TodoList from './components/TodoList.vue'
 import Statistics from './components/Statistics.vue'
 import RenderButton from './components/RenderButton.vue'
+import MoneyFilters from './components/MoneyFilters.vue'
 export default {
   name: 'LessonTwo',
   data() {
@@ -111,7 +114,8 @@ export default {
     Form,
     TodoList,
     Statistics,
-    RenderButton
+    RenderButton,
+    MoneyFilters
   },
   mounted() {
     let data = JSON.parse(localStorage.getItem('todoItems'));
