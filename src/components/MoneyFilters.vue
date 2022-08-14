@@ -18,11 +18,12 @@ export default {
         currency(val){
             
             if(Number(val)){
-                val =[val + " RUB", (val/64).toFixed(4) + " EUR", (val/62).toFixed(4) + " USD"]
+                let Rub = val.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + " RUB"
+                let Eur = (val/64).toFixed(2).replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + " EUR"
+                let Usd = (val/62).toFixed(2).replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + " USD"
+                val =[Rub, Eur, Usd]
 
-            }else{
-                val = val
-            }
+            }0
             return val
         }
     }

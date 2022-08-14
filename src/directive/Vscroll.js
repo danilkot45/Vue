@@ -1,5 +1,5 @@
 export default {
-  bind: function (el, binding, vnode) {
+  bind: function (el) {
 
     function magic() {
       if (window.pageYOffset > 100) {

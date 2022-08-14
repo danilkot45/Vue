@@ -1,5 +1,5 @@
 export default{
-    bind(el,bindings,vnode){
+    bind(el,bindings){
         let i=0;
         let j=0;
         let dt=new Array("#0000A0", "#A00000", "#00A000", "#00A0A0", "#A000A0", "#A0A000");

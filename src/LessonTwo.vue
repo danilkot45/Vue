@@ -24,7 +24,7 @@
     <br>
     <h2 v-show="this.todoItems.length == 0">{{ titleAdd }}</h2>
     <ul class="list-group">
-      <TodoList v-for="(i, index) in todoList" :id="index" @click="i.done = !i.done" :value="i.text"
+      <TodoList v-for="(i, index) in todoList" :key="index" :id="index" @click="i.done = !i.done" :value="i.text"
         @textarea="i.text = $event" :btntext="btnText(index)" :color="i.done ? 'btn btn-success' : 'btn btn-secondary'"
         @delete="removeTask(index)">
         
