@@ -23,7 +23,7 @@ export default {
                 let Usd = (val/62).toFixed(2).replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + " USD"
                 val =[Rub, Eur, Usd]
 
-            }0
+            }
             return val
         }
     }
