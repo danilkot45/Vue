@@ -37,8 +37,9 @@
 import Form from './components/Form.vue'
 import TodoList from './components/TodoList.vue'
 import Statistics from './components/Statistics.vue'
-import RenderButton from './components/RenderButton.vue'
 import MoneyFilters from './components/MoneyFilters.vue'
+// import RenderButton from './components/RenderButton.vue'
+
 export default {
   name: 'AppLessonTwo',
   data() {
@@ -114,8 +115,8 @@ export default {
     Form,
     TodoList,
     Statistics,
-    RenderButton,
     MoneyFilters
+    // RenderButton,
   },
   mounted() {
     let data = JSON.parse(localStorage.getItem('todoItems'));

@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import LessonTwo from './LessonTwo.vue'
-import ColorDirective from './directive/Vcolor'
-import BlurDirective from './directive/Vblur'
-import ScrollEndDirective from './directive/Vscroll'
+import MyPlugin from './plugins/plugin'
+// import ColorDirective from './directive/Vcolor'
+// import BlurDirective from './directive/Vblur'
+// import ScrollEndDirective from './directive/Vscroll'
 
-Vue.directive('color',ColorDirective)
-Vue.directive('blur',BlurDirective)
-Vue.directive('scroll-end',ScrollEndDirective)
+
+// Vue.directive('color',ColorDirective)
+// Vue.directive('blur',BlurDirective)
+// Vue.directive('scroll-end',ScrollEndDirective)
 
 Vue.mixin({
   created() {
@@ -19,6 +21,7 @@ Vue.mixin({
     console.log("component updated: " + this.$options.name);
   },
 });
+Vue.use(MyPlugin)
 
 new Vue({
   name:'App',
