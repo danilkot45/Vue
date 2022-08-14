@@ -40,7 +40,7 @@ import Statistics from './components/Statistics.vue'
 import RenderButton from './components/RenderButton.vue'
 import MoneyFilters from './components/MoneyFilters.vue'
 export default {
-  name: 'LessonTwo',
+  name: 'AppLessonTwo',
   data() {
     return {
       message: 'Hello from Vue App',

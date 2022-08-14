@@ -2,6 +2,7 @@
 import { h } from "vue";
 
 export default {
+  name:'AppRenderButton',
   data() {
     return {
       tag: "button",

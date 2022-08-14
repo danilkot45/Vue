@@ -8,6 +8,7 @@
 <script>
 
 export default {
+    name: 'AppMoneyFilters',
     data() {
         return {
             money: ''

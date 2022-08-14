@@ -11,7 +11,7 @@
 <script>
 
 export default {
-
+    name:'AppTodoList',
     // props:['text','id','color','btntext','done'],
     props: {
         value: String,
